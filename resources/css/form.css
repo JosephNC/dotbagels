@@ -1,0 +1,74 @@
+.form-label {
+    @apply mb-2 block text-gray-700 select-none;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    @apply leading-normal block w-full border text-gray-700 bg-white font-sans rounded text-left appearance-none relative focus:ring-primary focus:ring-1 focus:shadow-sm;
+
+    &::placeholder {
+        @apply text-gray-500 opacity-100;
+    }
+}
+
+.form-input,
+.form-textarea {
+    &:read-only {
+        @apply bg-gray-100 focus:ring-0 border-dotted;
+    }
+}
+
+.form-select {
+    @apply pr-6;
+
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAQCAYAAAAMJL+VAAAABGdBTUEAALGPC/xhBQAAAQtJREFUOBG1lEEOgjAQRalbGj2OG9caOACn4ALGtfEuHACiazceR1PWOH/CNA3aMiTaBDpt/7zPdBKy7M/DCL9pGkvxxVp7KsvyJftL5rZt1865M+Ucq6pyyF3hNcI7Cuu+728QYn/JQA5yKaempxuZmQngOwEaYx55nu+1lQh8GIatMGi+01NwBcEmhxBqK4nAPZJ78K0KKFAJmR3oPp8+Iwgob0Oa6+TLoeCvRx+mTUYf/FVBGTPRwDkfLxnaSrRwcH0FWhNOmrkWYbE2XEicqgSa1J0LQ+aPCuQgZiLnwewbGuz5MGoAhcIkCQcjaTBjMgtXGURMVHC1wcQEy0J+Zlj8bKAnY1/UzDe2dbAVqfXn6wAAAABJRU5ErkJggg==');
+    background-size: 0.7rem;
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+
+    &::-ms-expand {
+        @apply opacity-0;
+    }
+}
+
+.form-input.error,
+.form-textarea.error,
+.form-select.error {
+    @apply bg-red-50 border-red-500 focus:ring focus:ring-red-200;
+}
+
+.form-error {
+    @apply text-red-700 mt-1 text-sm;
+
+    &::first-letter {
+        @apply uppercase;
+    }
+}
+
+.form-label > input[type='checkbox'] {
+    display: none;
+}
+
+.form-label > input[type='checkbox'] ~ * {
+    @apply text-sm align-middle leading-tight;
+}
+
+.form-label > input[type='checkbox'] + .checkbox::before {
+    content: '';
+    padding: 0.1px 2.5px;
+    width: 1.2rem;
+    height: 1.2rem;
+    /* @apply border-gray-500 border rounded mr-2 w-4 h-4 text-base absolute -top-0.5 -left-px inline-block; */
+    @apply border-gray-500 border rounded mr-2 text-base inline-block align-middle;
+}
+
+.form-label > input[type='checkbox']:checked ~ * {
+    @apply text-primary;
+}
+
+.form-label > input[type='checkbox']:checked + *::before {
+    content: '✔';
+    line-height: 1.2;
+    @apply text-white text-center bg-primary border border-primary;
+}

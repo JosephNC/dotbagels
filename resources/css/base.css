@@ -1,0 +1,57 @@
+@layer base {
+    /* @font-face {
+        font-family: 'Antic';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/antic/v12/TuGfUVB8XY5DRZZMq9k.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+        font-family: 'Nunito';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/nunito/v16/XRXV3I6Li01BKofINeaB.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+        font-family: 'Josefin Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/josefinsans/v17/Qw3PZQNVED7rKGKxtqIqX5E-AVSJrOCfjY46_DjQbMZhLw.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    } */
+
+    a {
+        @apply text-primary hover:text-primary-800 focus:text-primary-800 hover:no-underline focus:outline-none;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+        @apply py-2 px-4 text-gray-700 leading-tight text-sm focus:outline-none;
+
+        &:not([type='checkbox']) {
+            @apply appearance-none;
+        }
+    }
+
+    input.disabled,
+    input[disabled],
+    button.disabled,
+    button[disabled],
+    select.disabled,
+    select[disabled] {
+        @apply bg-primary-900 outline-none cursor-not-allowed;
+    }
+
+    input,
+    textarea {
+        @apply focus:bg-white focus:border-primary;
+    }
+}
