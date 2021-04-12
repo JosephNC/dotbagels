@@ -1,7 +1,7 @@
 <template>
     <div>
         <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-        <select :id="id" ref="input" v-model="selected" v-bind="$attrs" class="form-select" :class="{ error: error }">
+        <select :id="id" ref="input" v-model="selected" v-bind="$attrs" class="form-select" :class="{ error: error }" @change="change">
             <slot />
         </select>
         <div v-if="error" class="form-error">{{ error }}</div>
@@ -39,6 +39,11 @@ export default {
         select() {
             this.$refs.input.select()
         },
+        change($event) {
+            // $emit('change', $event); $emit('input', $event.target.value)
+            this.$emit('change', $event)
+            this.$emit('input', $event.target.value)
+        }
     },
 }
 </script>

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,20 +37,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        return array_merge(parent::share($request), [
-            'auth' => function () use ($request) {
-                $user = $request->user();
+        $user = $request->user();
+
+        $data = [
+            'auth' => function () use ($request, $user) {
+                if ($user) $phone_number = PhoneNumber::make($user->meta('phone', ''));
 
                 return [
                     'user' => $user ? [
                         'id'            => $user->id,
+                        // 'uuid'          => $user->uuid,
                         'email'         => $user->email,
-                        'first_name'    => $user->meta( 'first_name', '' ),
-                        'last_name'     => $user->meta( 'last_name', '' ),
-                        'phone'         => $user->meta( 'phone', '' ),
-                        // 'phone'         => $phone_number,
-                        // 'phone_country' => $phone_country,
-                        'points'        => (int) $user->meta( 'points', 0 ),
+                        'is_admin'      => $user->isAdmin,
+                        'full_name'     => $user->name,
+                        'first_name'    => $user->meta('first_name', ''),
+                        'last_name'     => $user->meta('last_name', ''),
+                        'phone'         => $phone_number->formatNational(),
+                        'phone_country' => $phone_number->getCountry(),
+                        'points'        => (int) $user->meta('points', 0),
                         'photo'         => $user->photoUrl(['w' => 60, 'h' => 60, 'fit' => 'crop']),
                     ] : null,
                 ];
@@ -61,6 +66,17 @@ class HandleInertiaRequests extends Middleware
                     'error'     => $request->session()->get('error'),
                 ];
             },
-        ]);
+        ];
+
+        if ( $user && $user->isAdmin ) {
+            $data['settings'] = collect( settings() )->filter( function( $value, $key ) {
+                return stripos( 'square_data_', $key ) === false;
+            } );
+            $data['settings']['currency'] = $data['settings']['currency'] ?? 'USD';
+            $data['settings']['currency_data'] = currencies($data['settings']['currency']);
+            $data['admin_layout'] = $user->isAdmin || $user->isAgent;
+        }
+
+        return array_merge(parent::share($request), $data);
     }
 }

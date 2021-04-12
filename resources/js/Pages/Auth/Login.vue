@@ -17,9 +17,8 @@
                         <text-input v-model="form.password" :error="form.errors.password" placeholder="Password" type="password" />
                         <inertia-link class="text-xs absolute top-0 right-0 pl-0 p-3 leading-tight" :href="route('password.request')">Reset password?</inertia-link>
                     </div>
-
-                    <!-- <checkbox-input v-model="form.password" :error="form.errors.password" class="mt-5 select-none flex items-center" placeholder="Password" type="password" /> -->
-                    <checkbox-input v-model="form.remember" class="mt-5" label="Remember Me" @change="changeRemember" />
+                    
+                    <checkbox-input :model="form.remember" class="mt-5" label="Remember Me" @change="changeRemember" />
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-100 flex justify-between items-center">
                     <inertia-link class="text-sm" :href="route('register')">Create an account</inertia-link>
@@ -60,6 +59,9 @@ export default {
             this.form.errors.remember = '';
         },
         login() {
+            // Clear all errors
+            // this.form.clearErrors()
+
             this.form
                 .transform(data => ({
                     ...data,

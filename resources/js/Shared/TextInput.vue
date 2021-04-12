@@ -1,7 +1,7 @@
 <template>
     <div>
         <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-        <input :id="id" ref="input" v-bind="$attrs" class="form-input" :class="{ error: error }" :type="type" :value="value" @input="$emit('input', $event.target.value)" :placeholder="placeholder" />
+        <input :id="id" ref="input" v-bind="$attrs" class="form-input" :class="[{ error: error }, `${className}`]" :type="type" :value="value" @input="$emit('input', $event.target.value)" @keypress="$emit('keypress', $event)" @keyup="$emit('keyup', $event)" :placeholder="placeholder" />
         <div v-if="error" class="form-error">{{ error }}</div>
     </div>
 </template>
@@ -21,7 +21,11 @@ export default {
             default: 'text',
         },
         placeholder: String,
-        value: String,
+        className: {
+            type: String,
+            default: ''
+        },
+        value: [ String, Number ],
         label: String,
         error: String,
     },

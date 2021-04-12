@@ -3,11 +3,15 @@
 }
 
 .btn-primary {
-    @apply bg-primary hover:bg-primary-800 focus:bg-primary-800 text-white;
+    @apply bg-primary hover:bg-primary-800 focus:bg-primary-800 text-white focus:ring-primary;
+}
+
+.btn-accent {
+    @apply bg-accent hover:bg-accent-800 focus:bg-accent-800 text-white focus:ring-accent;
 }
 
 .btn {
-    @apply py-2 px-4 rounded text-white font-bold leading-tight text-sm appearance-none whitespace-nowrap focus:outline-none;
+    @apply py-2 px-4 rounded text-white font-bold leading-tight text-sm appearance-none whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
 
 .btn-spinner,

@@ -36,4 +36,4 @@ mix.js('resources/js/app.js', 'public/js')
     .copyDirectory( 'resources/images', 'public/images' )
     .version()
 
-// .sourceMaps()
+.sourceMaps()

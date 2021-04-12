@@ -21,7 +21,7 @@
 
                     <text-input v-model="form.password" :error="form.errors.password" class="mt-3" placeholder="Password" type="password" @input="form.clearErrors('phone_number')" />
 
-                    <checkbox-input v-model="form.tos" :error="form.errors.tos" class="mt-5" label="By clicking register, you agree to our Terms of Service?" @change="changeTos" />
+                    <checkbox-input :model="form.tos" :error="form.errors.tos" class="mt-5" label="By clicking register, you agree to our Terms of Service?" @change="changeTos" />
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-100 flex justify-between items-center">
                     <inertia-link class="text-sm" :href="route('login')">Log into account</inertia-link>
@@ -72,6 +72,9 @@ export default {
         register() {
             // Clear all errors
             // this.form.clearErrors()
+
+            // this.$page.props.flash.error = null
+            // this.$page.props.errors = null
 
             // Send the form
             this.form

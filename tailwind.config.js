@@ -50,6 +50,7 @@ module.exports = {
             colors: {
                 primary: {
                     DEFAULT: '#1b5125',
+                    25: '#eff3f0',
                     50: '#e8eee9',
                     100: '#bbcbbe',
                     200: '#8da892',
@@ -108,7 +109,7 @@ module.exports = {
             minWidth: {
                 '0': maxWidth[0],
                 xl: maxWidth.xl,
-                ...maxWidth
+                ...maxWidth,
             },
             inset: {
                 ...spacing,
@@ -193,6 +194,7 @@ module.exports = {
             fill: ['hover', 'focus', 'group-hover'],
             outline: ['hover', 'focus', 'active'],
             appearance: ['hover', 'focus', 'active'],
+            backgroundColor: ['active'],
             // border: ['hover', 'focus', 'active'],
         },
     },

@@ -17,7 +17,7 @@ class CreateUserMetasTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();
             $table->string('key');
-            $table->mediumText('value');
+            $table->longText('value');
         });
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="p-6 bg-primary-50 min-h-screen flex justify-center items-center md:items-start">
         <div class="w-full max-w-md md:mt-16">
-            <form class="bg-white rounded-md shadow-lg overflow-hidden" @submit.prevent="sendLink">
+            <form class="bg-white rounded-md shadow-lg overflow-hidden" @submit.prevent="resetPassword">
                 <img src="/images/logo.png" class="block mx-auto w-20 max-w-min fill-white" height="50" />
 
                 <div class="px-8 pb-4">
@@ -49,7 +49,10 @@ export default {
         }
     },
     methods: {
-        sendLink() {
+        resetPassword() {
+            // Clear all errors
+            // this.form.clearErrors()
+
             this.form
                 // .transform(data => ({
                 //     ...data,

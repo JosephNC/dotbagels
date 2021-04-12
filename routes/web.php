@@ -11,6 +11,9 @@ use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\LoyaltyController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SquareController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +37,7 @@ Route::middleware('guest')->group(function () {
 
     Route::prefix('register')->group(function () {
         Route::get('/', [RegisterController::class, 'showRegistrationForm'])->name('register');
-        Route::post('/', [RegisterController::class, 'register']);
+        Route::post('/', [RegisterController::class, 'register'])->middleware('throttle:5,1'); // Available 5 times every minute;
     });
 
     Route::prefix('password')->group(function () {
@@ -68,32 +71,71 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('verified')->group(function () {
+
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-        // Users
-        Route::prefix('users')->group(function () {
-
-            Route::get('/', [UsersController::class, 'index'])->name('users')->middleware('remember');
-            Route::name('users.')->group(function () {
-
-                Route::get('/create', [UsersController::class, 'create'])->name('create');
-                Route::post('/', [UsersController::class, 'store'])->name('store');
-                Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('edit');
-                Route::put('/{user}', [UsersController::class, 'update'])->name('update');
-                Route::delete('/{user}', [UsersController::class, 'destroy'])->name('destroy');
-                Route::put('/{user}/restore', [UsersController::class, 'restore'])->name('restore');
-            });
-        });
 
         // Activities
         Route::get('/activities', [ActivitiesController::class, 'index'])->name('activities')->middleware('remember');
 
         // Rewards
-        Route::get('/rewards', [RewardsController::class, 'index'])->name('rewards')->middleware('remember');
+        Route::prefix('rewards')->group(function () {
+
+            Route::get('/', [RewardsController::class, 'index'])->name('rewards');
+
+            Route::middleware(['admin', 'agent'])->group(function () {
+
+                Route::get('/input', [RewardsController::class, 'input'])->name('rewards.input');
+                Route::post('/check', [RewardsController::class, 'check'])->name('rewards.check');
+                Route::post('/redeem', [RewardsController::class, 'redeem'])->name('rewards.redeem');
+            });
+        });
 
         // Reports
         Route::get('reports', [ReportsController::class, 'index'])->name('reports');
+
+        // Account
+        Route::get('account', [UsersController::class, 'account'])->name('account');
+        Route::put('account', [UsersController::class, 'accountUpdate'])->name('account.update');
+
+
+        /**
+         * Administrator Routes
+         */
+        Route::middleware('admin')->group(function () {
+
+            Route::get('items', [SquareController::class, 'items'])->name('items');
+            Route::get('orders', [SquareController::class, 'orders'])->name('orders');
+            Route::put('square-sync', [SquareController::class, 'sync'])->name('square.sync');
+
+            // Settings
+            Route::prefix('settings')->group(function () {
+                Route::get('/', [SettingsController::class, 'index'])->name('settings');
+                Route::put('/', [SettingsController::class, 'update'])->name('settings.update');
+            });
+
+            // Loyalty
+            Route::prefix('loyalty')->group(function () {
+
+                Route::get('/', [LoyaltyController::class, 'index'])->name('loyalty');
+                Route::get('/create', [LoyaltyController::class, 'create'])->name('loyalty.create');
+                Route::post('/', [LoyaltyController::class, 'store'])->name('loyalty.store');
+                Route::get('/{program_id}/edit', [LoyaltyController::class, 'edit'])->name('loyalty.edit');
+                Route::put('/{program_id}', [LoyaltyController::class, 'update'])->name('loyalty.update');
+            });
+
+            // Users
+            Route::prefix('users')->group(function () {
+
+                Route::get('/', [UsersController::class, 'index'])->name('users')->middleware('remember');
+                Route::get('/create', [UsersController::class, 'create'])->name('users.create');
+                Route::post('/', [UsersController::class, 'store'])->name('users.store');
+                Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+                Route::put('/{user}', [UsersController::class, 'update'])->name('users.update');
+                Route::delete('/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
+                Route::put('/{user}/restore', [UsersController::class, 'restore'])->name('users.restore');
+            });
+        });
     });
 });
 

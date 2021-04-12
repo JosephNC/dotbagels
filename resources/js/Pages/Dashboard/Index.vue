@@ -13,11 +13,11 @@
             </div>
 
             <!-- <div class="ml-1 w-1/2">
-                <div class="px-4 py-5 sm:px-6">
-                    <h2 class="text-lg leading-6 font-semibold">Upcoming Rewards</h2>
-                    <p class="text-sm text-gray-500">Spend at least $10 to earn 1 point toward a free item.</p>
-                </div>
-            </div> -->
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg leading-6 font-semibold">Upcoming Rewards</h2>
+                        <p class="text-sm text-gray-500">Spend at least $10 to earn 1 point toward a free item.</p>
+                    </div>
+                </div> -->
         </div>
 
         <div class="bg-white shadow overflow-hidden rounded-lg p-5">
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import Layout from '@/Shared/UserLayout'
+import Layout from '@/Shared/Layout'
 
 export default {
     metaInfo: { title: 'Dashboard' },
@@ -119,8 +119,9 @@ export default {
         return {
             upcomingRewards: [],
             activities: [],
-            recentActivities: []
+            recentActivities: [],
         }
     },
+    created() {},
 }
 </script>

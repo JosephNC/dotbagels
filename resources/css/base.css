@@ -47,7 +47,7 @@
     button[disabled],
     select.disabled,
     select[disabled] {
-        @apply bg-primary-900 outline-none cursor-not-allowed;
+        @apply outline-none cursor-not-allowed;
     }
 
     input,

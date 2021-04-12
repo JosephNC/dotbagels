@@ -15,6 +15,12 @@ class CreateRewardsTable extends Migration
     {
         Schema::create('rewards', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('user_id')->index();
+            // $table->string('program_id')->index();
+            $table->string('program_id');
+            $table->string('reward_tier_id');
+            $table->bigInteger('points', 0);
+            $table->timestamp('redeemed_at')->nullable();
             $table->timestamps();
         });
     }

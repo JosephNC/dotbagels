@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\SquareApiJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +26,21 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->job(new SquareApiJob)
+            ->hourly()
+            ->withoutOverlapping();
+
+        // Clear logs and caches
+        $schedule->call( function() use ($schedule) {
+            $schedule->command('clear-compiled');
+            $schedule->command('optimize');
+            $schedule->command('auth:clear-resets');
+            $schedule->command('cache:clear');
+            $schedule->command('optimize:clear');
+            $schedule->command('view:clear');
+            // $schedule->command('logs:clear')->daily();
+            $schedule->command('logs:clear')->runInBackground();
+        } )->everyMinute();
     }
 
     /**
@@ -34,7 +50,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

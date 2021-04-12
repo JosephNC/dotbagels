@@ -1,63 +1,65 @@
 <template>
-  <div>
-    <h1 class="mb-8 font-bold text-3xl">Users</h1>
-    <div class="mb-6 flex justify-between items-center">
-      <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
-        <label class="block text-gray-700">Role:</label>
-        <select v-model="form.role" class="mt-1 w-full form-select">
-          <option :value="null" />
-          <option value="user">User</option>
-          <option value="owner">Owner</option>
-        </select>
-        <label class="mt-4 block text-gray-700">Trashed:</label>
-        <select v-model="form.trashed" class="mt-1 w-full form-select">
-          <option :value="null" />
-          <option value="with">With Trashed</option>
-          <option value="only">Only Trashed</option>
-        </select>
-      </search-filter>
-      <inertia-link class="btn btn-primary" :href="route('users.create')">
-        <span>Create</span>
-        <span class="hidden md:inline">User</span>
-      </inertia-link>
+    <div>
+        <h1 class="mb-8 font-bold text-3xl">Users</h1>
+
+        <div class="mb-6 flex justify-between items-center">
+            <search-filter v-model="form.search" class="w-full max-w-md mr-4" @reset="reset">
+                <label class="block text-gray-700">Role:</label>
+                <select v-model="form.role" class="mt-1 w-full form-select">
+                    <option value="all">All</option>
+                    <option v-for="(value, key) in $page.props.settings.roles" :key="key" :value="key" v-text="value"></option>
+                </select>
+                <label class="mt-4 block text-gray-700">Trashed:</label>
+                <select v-model="form.trashed" class="mt-1 w-full form-select">
+                    <option value="only">Only Trashed</option>
+                    <option value="with">With Trashed</option>
+                    <option value="without">Without Trashed</option>
+                </select>
+            </search-filter>
+            <inertia-link class="btn btn-primary" as="button" :href="route('users.create')">Create new user</inertia-link>
+        </div>
+        <div class="bg-white rounded-md shadow overflow-x-auto">
+            <table class="w-full whitespace-nowrap">
+                <tr class="text-left font-bold">
+                    <th class="px-6 py-5">User</th>
+                    <th class="px-6 py-5">Role</th>
+                    <th class="px-6 py-5" colspan="2">Created</th>
+                </tr>
+                <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100 text-sm font-medium" :class="{ 'line-through bg-orange-100 opacity-50': user.deleted_at }">
+                    <td class="border-t">
+                        <inertia-link class="px-6 py-4 flex items-center focus:text-primary-500" :href="route('users.edit', user.id)">
+                            <img v-if="user.photo" class="block w-10 h-10 rounded-full mr-3 -my-2 border-2 border-dotted p-2px border-accent-300" :src="user.photo" />
+                            <div class="flex flex-col leading-tight">
+                                <span class="">{{ user.name }}</span>
+                                <span class="text-xs">{{ user.email }}</span>
+                            </div>
+                            <!-- <icon v-if="user.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2" /> -->
+                        </inertia-link>
+                    </td>
+                    <td class="border-t">
+                        <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+                            {{ user.role }}
+                        </inertia-link>
+                    </td>
+                    <td class="border-t">
+                        <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+                            {{ user.created_at }}
+                        </inertia-link>
+                    </td>
+                    <td class="border-t w-px">
+                        <inertia-link class="px-6 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
+                            <icon name="cheveron-right" class="block w-4 h-4 fill-gray-400" />
+                        </inertia-link>
+                    </td>
+                </tr>
+                <tr v-if="users.data.length === 0">
+                    <td class="border-t px-6 py-5" colspan="4">No users found.</td>
+                </tr>
+            </table>
+        </div>
+        <pagination class="mt-6" :links="users.links" />
+        <!-- <div class="mt-20 text-center text-lg font-bold">{{ users.data.length }} users</div> -->
     </div>
-    <div class="bg-white rounded-md shadow overflow-x-auto">
-      <table class="w-full whitespace-nowrap">
-        <tr class="text-left font-bold">
-          <th class="px-6 pt-6 pb-4">Name</th>
-          <th class="px-6 pt-6 pb-4">Email</th>
-          <th class="px-6 pt-6 pb-4" colspan="2">Role</th>
-        </tr>
-        <tr v-for="user in users" :key="user.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
-          <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center focus:text-primary-500" :href="route('users.edit', user.id)">
-              <img v-if="user.photo" class="block w-5 h-5 rounded-full mr-2 -my-2" :src="user.photo" />
-              {{ user.name }}
-              <icon v-if="user.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2" />
-            </inertia-link>
-          </td>
-          <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
-              {{ user.email }}
-            </inertia-link>
-          </td>
-          <td class="border-t">
-            <inertia-link class="px-6 py-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
-              {{ user.owner ? 'Owner' : 'User' }}
-            </inertia-link>
-          </td>
-          <td class="border-t w-px">
-            <inertia-link class="px-4 flex items-center" :href="route('users.edit', user.id)" tabindex="-1">
-              <icon name="cheveron-right" class="block w-6 h-6 fill-gray-400" />
-            </inertia-link>
-          </td>
-        </tr>
-        <tr v-if="users.length === 0">
-          <td class="border-t px-6 py-4" colspan="4">No users found.</td>
-        </tr>
-      </table>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -66,41 +68,43 @@ import pickBy from 'lodash/pickBy'
 import Layout from '@/Shared/Layout'
 import throttle from 'lodash/throttle'
 import mapValues from 'lodash/mapValues'
+import Pagination from '@/Shared/Pagination'
 import SearchFilter from '@/Shared/SearchFilter'
 
 export default {
-  metaInfo: { title: 'Users' },
-  components: {
-    Icon,
-    SearchFilter,
-  },
-  layout: Layout,
-  props: {
-    users: Array,
-    filters: Object,
-  },
-  data() {
-    return {
-      form: {
-        search: this.filters.search,
-        role: this.filters.role,
-        trashed: this.filters.trashed,
-      },
-    }
-  },
-  watch: {
-    form: {
-      handler: throttle(function() {
-        let query = pickBy(this.form)
-        this.$inertia.replace(this.route('users', Object.keys(query).length ? query : { remember: 'forget' }))
-      }, 150),
-      deep: true,
+    metaInfo: { title: 'Users' },
+    components: {
+        Icon,
+        Pagination,
+        SearchFilter,
     },
-  },
-  methods: {
-    reset() {
-      this.form = mapValues(this.form, () => null)
+    layout: Layout,
+    props: {
+        users: Object,
+        filters: Object,
     },
-  },
+    data() {
+        return {
+            form: {
+                search: this.filters.search,
+                role: this.filters.role ?? 'all',
+                trashed: this.filters.trashed ?? 'with',
+            },
+        }
+    },
+    watch: {
+        form: {
+            handler: throttle(function () {
+                let query = pickBy(this.form)
+                this.$inertia.replace(this.route('users', Object.keys(query).length ? query : { remember: 'forget' }))
+            }, 200),
+            deep: true,
+        },
+    },
+    methods: {
+        reset() {
+            this.form = mapValues(this.form, () => null)
+        },
+    },
 }
 </script>

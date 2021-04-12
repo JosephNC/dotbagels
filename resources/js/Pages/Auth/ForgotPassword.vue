@@ -49,6 +49,9 @@ export default {
     },
     methods: {
         sendLink() {
+            // Clear all errors
+            // this.form.clearErrors()
+
             this.form
                 // .transform(data => ({
                 //     ...data,

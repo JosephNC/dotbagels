@@ -43,7 +43,11 @@ class VerifyController extends Controller
 
     public function send(Request $request)
     {
-        $request->user()->sendEmailVerificationNotification();
+        $user = $request->user();
+
+        if ( $user->hasVerifiedEmail() ) return redirect( $this->redirectTo );
+
+        $user->sendEmailVerificationNotification();
 
         return back()->with('success', 'Verification link sent!');
     }

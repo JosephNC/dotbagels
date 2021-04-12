@@ -43,8 +43,6 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $data = array_map( 'trim', $data ); // Trim all data
-
         return Validator::make($data, [
             'email'         => 'required|string|email|max:100|unique:users',
             'password'      => 'required|string|min:6|max:30',
@@ -75,6 +73,8 @@ class RegisterController extends Controller
     {
         $data = array_map( 'trim', $data ); // Trim all data
 
+        $is_first_user = is_first_user();
+
         // Create User
         $user = (new User)->create([
             'email'     => $data['email'],
@@ -86,7 +86,7 @@ class RegisterController extends Controller
             [ 'key' => 'first_name', 'value' => ucfirst($data['first_name']) ],
             [ 'key' => 'last_name', 'value' => ucfirst($data['last_name']) ],
             [ 'key' => 'phone', 'value' => PhoneNumber::make($data['phone'], $data['phone_country'])->formatE164() ],
-            [ 'key' => 'role', 'value' => 'user' ]
+            [ 'key' => 'role', 'value' => $is_first_user ? 'admin' : 'user' ]
         ]);
 
         return $user;

@@ -3,9 +3,10 @@ import VueMeta from 'vue-meta'
 import PortalVue from 'portal-vue'
 import { App, plugin } from '@inertiajs/inertia-vue'
 import { InertiaProgress } from '@inertiajs/progress/src'
+import mixins from './mixins'
 
 Vue.config.productionTip = false
-Vue.mixin({ methods: { route: window.route } })
+Vue.mixin( mixins )
 Vue.use(plugin)
 Vue.use(PortalVue)
 Vue.use(VueMeta)

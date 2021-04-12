@@ -20,12 +20,12 @@ export default {
             },
         },
         value: String,
-        // countryCode: {
-        //     type: String,
-        //     default() {
-        //         return 'US'
-        //     }
-        // },
+        initialCountryCode: {
+            type: String,
+            default() {
+                return 'US'
+            },
+        },
         placeholder: String,
         label: String,
         error: String,
@@ -39,8 +39,8 @@ export default {
         this.iti = intlTelInput(this.$refs.input, {
             nationalMode: true,
             formatOnDisplay: true,
-            separateDialCode: true,
-            initialCountry: this.countryCode,
+            separateDialCode: false,
+            initialCountry: this.initialCountryCode,
             autoplaceholder: 'aggressive',
             customContainer: 'w-full',
             utilsScript: '/js/libs/intl-tel-input-utils.min.js',
@@ -53,13 +53,17 @@ export default {
             const width = this.$refs.input.offsetWidth + 'px'
             // parent.style.width = width
             // parent.style.position = 'absolute'
-            list.style.width = width
-            list.style.whiteSpace = 'initial'
+
+            if (list != null) {
+                list.style.width = width
+                list.style.whiteSpace = 'initial'
+            }
 
             // Fix country code if not detected
-            if ( ! this.iti.getSelectedCountryData().iso2 ) this.iti.setCountry( 'us' )
+            if (!this.iti.getSelectedCountryData().iso2) this.iti.setCountry(this.initialCountryCode)
         })
 
+        // When the country dropdown is changed
         this.$refs.input.addEventListener('countrychange', () => this.$emit('countryCode', this.iti.getSelectedCountryData().iso2.toUpperCase()))
     },
     methods: {
