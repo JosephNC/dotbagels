@@ -31,7 +31,7 @@
                             <img v-if="user.photo" class="block w-10 h-10 rounded-full mr-3 -my-2 border-2 border-dotted p-2px border-accent-300" :src="user.photo" />
                             <div class="flex flex-col leading-tight">
                                 <span class="">{{ user.name }}</span>
-                                <span class="text-xs">{{ user.email }}</span>
+                                <span class="text-xs">{{ user.email }} <em v-if="! user.verified" class="text-gray">(Unverified)</em> </span>
                             </div>
                             <!-- <icon v-if="user.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2" /> -->
                         </inertia-link>

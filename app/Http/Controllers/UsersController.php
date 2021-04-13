@@ -43,6 +43,7 @@ class UsersController extends Controller
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
+                        'verified'      => $user->hasVerifiedEmail(),
                         'role' => settings('roles')[$user->meta('role', 'user')],
                         'photo' => $user->photoUrl(['w' => 100, 'h' => 100, 'fit' => 'crop']),
                         'created_at' => $user->created_at->diffForHumans(),
@@ -178,7 +179,7 @@ class UsersController extends Controller
         $part = Request::only('first_name', 'last_name', 'phone', 'role');
 
         foreach ($part as $key => $value) {
-            if ($key == 'role' && ! $can_admin_update) continue;
+            if ($key == 'role' && !$can_admin_update) continue;
 
             $value = in_array($key, ['first_name', 'last_name']) ? ucfirst($value) : $value;
 

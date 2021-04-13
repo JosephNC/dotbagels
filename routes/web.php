@@ -14,6 +14,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LoyaltyController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SquareController;
+use App\Mail\TestAmazonSes;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Route::get('test-mail', function () {
+//     Mail::to('henryphanes@getnada.com')->send(new TestAmazonSes('It works!'));
+
+//     return 'Done';
+// });
 
 // Auth
 Route::middleware('guest')->group(function () {
