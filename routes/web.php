@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::get('test-mail', function () {
-//     Mail::to('henryphanes@getnada.com')->send(new TestAmazonSes('It works!'));
+//     Mail::to('leobowen@getnada.com')->send(new TestAmazonSes('It works!'));
 
 //     return 'Done';
 // });

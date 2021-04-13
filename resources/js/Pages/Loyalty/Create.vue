@@ -5,12 +5,11 @@
         <div class="bg-white rounded-md shadow overflow-hidden max-w-3xl">
             <form @submit.prevent="store" autocomplete="off">
                 <div class>
-                    <!-- <div class="px-8 py-4 border-gray-50 flex items-center shadow-lg"><h3 class="font-bold text-xl text-center">Earning Points</h3></div> -->
                     <div class="p-8">
                         <h4 class="font-bold text-lg mb-3">Terminology</h4>
                         <div class="pl-6 -mr-6 -mb-8 flex flex-wrap">
                             <text-input v-model="form.terminology.one" :error="form.errors['terminology.one']" class="pr-6 pb-8 w-full lg:w-1/2" label="Singular Form" placeholder="Point" />
-                            <text-input v-model="form.terminology.other" :error="form.errors['terminology.other']" class="pr-6 pb-8 w-full lg:w-1/2" label="Plural Form" placeholder="Points"  />
+                            <text-input v-model="form.terminology.other" :error="form.errors['terminology.other']" class="pr-6 pb-8 w-full lg:w-1/2" label="Plural Form" placeholder="Points" />
                         </div>
                     </div>
 
@@ -19,7 +18,7 @@
                     <div class="p-8">
                         <h4 class="font-bold text-lg mb-3">Accrual Rule</h4>
                         <div class="pl-6 -mr-6 -mb-8 flex flex-wrap">
-                            <select-input v-model="form.accrual_type" :error="form.errors.accrual_type" class="pr-6 pb-8 w-full lg:w-1/3" label="Earn By" >
+                            <select-input v-model="form.accrual_type" :error="form.errors.accrual_type" class="pr-6 pb-8 w-full lg:w-1/3" label="Earn By">
                                 <option v-for="(value, key) in accrual_types" :key="key" :value="key" v-text="value"></option>
                             </select-input>
 
@@ -27,7 +26,17 @@
 
                             <text-input v-if="form.accrual_type == 'SPEND'" v-model="form.amount" :error="form.errors.amount" class="pr-6 pb-8 w-full lg:w-1/3" :label="`Amount Spent (${settings.currency})`" :placeholder="moneyFormat(0)" @keypress="onlyDecimalFormat" />
 
-                            <text-input v-model="form.points" :error="form.errors.points" class="pr-6 pb-8 w-full lg:w-1/3" :label="`${getTerminologyFor(2)} Earned`" :placeholder="`1 ${getTerminologyFor(1)}`" @keypress="onlyNumberFormat($event); onlyGreaterThanZero($event)"  />
+                            <text-input
+                                v-model="form.points"
+                                :error="form.errors.points"
+                                class="pr-6 pb-8 w-full lg:w-1/3"
+                                :label="`${getTerminologyFor(2)} Earned`"
+                                :placeholder="`1 ${getTerminologyFor(1)}`"
+                                @keypress="
+                                    onlyNumberFormat($event)
+                                    onlyGreaterThanZero($event)
+                                "
+                            />
                         </div>
                     </div>
 
@@ -38,13 +47,32 @@
                         <div class="text-center text-red my-5">{{ form.errors.reward_tiers }}</div>
 
                         <div v-for="(tier, tier_k) in form.reward_tiers" :key="tier_k" class="pl-6 -mr-6 -mb-8 flex flex-wrap">
-                            <select-input v-model="tier.scope" :error="form.errors[`reward_tiers.${tier_k}.scope`]" class="pr-6 pb-8 w-full lg:w-1/2" label="Reward Type" >
+                            <select-input v-model="tier.scope" :error="form.errors[`reward_tiers.${tier_k}.scope`]" class="pr-6 pb-8 w-full lg:w-1/2" label="Reward Type">
                                 <option v-for="(value, key) in discount_scopes" :key="key" :value="key" v-text="value"></option>
                             </select-input>
 
-                            <text-input v-model="tier.points" :error="form.errors[`reward_tiers.${tier_k}.points`]" class="pr-6 pb-8 w-full lg:w-1/2" label="Reward Points" :placeholder="`10 ${getTerminologyFor(10)}`" @keypress="onlyNumberFormat($event); onlyGreaterThanZero($event)"  />
+                            <text-input
+                                v-model="tier.points"
+                                :error="form.errors[`reward_tiers.${tier_k}.points`]"
+                                class="pr-6 pb-8 w-full lg:w-1/2"
+                                label="Reward Points"
+                                :placeholder="`10 ${getTerminologyFor(10)}`"
+                                @keypress="
+                                    onlyNumberFormat($event)
+                                    onlyGreaterThanZero($event)
+                                "
+                            />
 
-                            <select-input v-model="tier.discount_type" :error="form.errors[`reward_tiers.${tier_k}.discount_type`]" class="pr-6 pb-8 w-full lg:w-1/2" label="Discount Type" @change="tier.discount_type = $event.target.value; generateTierName(tier)" >
+                            <select-input
+                                v-model="tier.discount_type"
+                                :error="form.errors[`reward_tiers.${tier_k}.discount_type`]"
+                                class="pr-6 pb-8 w-full lg:w-1/2"
+                                label="Discount Type"
+                                @change="
+                                    tier.discount_type = $event.target.value
+                                    generateTierName(tier)
+                                "
+                            >
                                 <option v-for="(value, key) in discount_types" :key="key" :value="key" v-text="value"></option>
                             </select-input>
 
@@ -60,11 +88,6 @@
                                 <inertia-link href="#" @click.prevent="removeTier(tier_k)" class="text-xs text-red-400 hover:text-red-500 font-bold bg-red-200 hover:bg-red-300 py-1 px-4 rounded-t absolute -top-6 left-72">Remove</inertia-link>
                             </div>
                         </div>
-
-                        <!-- <inertia-link v-if="!showAddNewTierButton" href="#" class="flex items-center justify-center group my-10" @click.prevent="addNewTierButton">
-                            <icon class="w-4 h-4 mr-2 fill-primary group-hover:fill-primary-300" name="add-outline" />
-                            <div class="text-xs font-semibold text-primary group-hover:text-primary-300 leading-tight">Add a New Reward</div>
-                        </inertia-link> -->
 
                         <inertia-link v-if="showAddNewTierButton" as="button" href="#" class="flex items-center justify-center mx-auto group my-10" @click.prevent="addNewTierButton">
                             <icon class="w-4 h-4 mr-2 fill-primary group-hover:fill-primary-300" name="add-outline" />
@@ -157,7 +180,7 @@ export default {
             this.form.post(this.route('loyalty.store'))
         },
         addNewTierButton() {
-            this.form.reward_tiers.push({...this.reward_tiers_temp})
+            this.form.reward_tiers.push({ ...this.reward_tiers_temp })
             // this.showAddNewTierButton = false
         },
         removeTier(key) {
@@ -170,7 +193,7 @@ export default {
             // only generate if not editted/touched
             if (tier.nameHasChanged) return
 
-            if ( this.isEmpty(tier.discount_value) ) {
+            if (this.isEmpty(tier.discount_value)) {
                 tier.name = ''
                 return
             }
@@ -181,27 +204,27 @@ export default {
                 default:
                 case 'FIXED_AMOUNT':
                     format = this.moneyFormat(tier.discount_value)
-                    break;
+                    break
                 case 'FIXED_PERCENTAGE':
                     format = this.decimalFormat(tier.discount_value)
-                    format = `${isNaN(format) ? '' : format }%`
-                    break;
+                    format = `${isNaN(format) ? '' : format}%`
+                    break
             }
 
             tier.name = `${format} off entire sale`
         },
-        getTerminologyFor( value ) {
-            const def = [ 'Point', 'Points' ]
+        getTerminologyFor(value) {
+            const def = ['Point', 'Points']
             let terminology
 
-            if ( parseInt(value) > 1 ) {
-                terminology = this.isEmpty(this.form.terminology.other ) ? def[1] : this.form.terminology.other
+            if (parseInt(value) > 1) {
+                terminology = this.isEmpty(this.form.terminology.other) ? def[1] : this.form.terminology.other
             } else {
-                terminology = this.isEmpty(this.form.terminology.one ) ? def[0] : this.form.terminology.one
+                terminology = this.isEmpty(this.form.terminology.one) ? def[0] : this.form.terminology.one
             }
 
             return terminology
-        }
+        },
     },
 }
 </script>

@@ -33,7 +33,6 @@
                                 <span class="">{{ user.name }}</span>
                                 <span class="text-xs">{{ user.email }} <em v-if="! user.verified" class="text-gray">(Unverified)</em> </span>
                             </div>
-                            <!-- <icon v-if="user.deleted_at" name="trash" class="flex-shrink-0 w-3 h-3 fill-gray-400 ml-2" /> -->
                         </inertia-link>
                     </td>
                     <td class="border-t">
@@ -58,7 +57,6 @@
             </table>
         </div>
         <pagination class="mt-6" :links="users.links" />
-        <!-- <div class="mt-20 text-center text-lg font-bold">{{ users.data.length }} users</div> -->
     </div>
 </template>
 

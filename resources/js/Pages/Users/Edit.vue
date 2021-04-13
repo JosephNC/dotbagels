@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="px-8 py-4 bg-gray-50 border-t border-gray-100 flex items-center">
-                    <button v-if="!user.deleted_at" class="text-red-600 hover:underline p-0" tabindex="-1" type="button" @click="destroy">Delete User</button>
+                    <button class="text-red-600 hover:underline p-0" tabindex="-1" type="button" @click="destroy">{{ !user.deleted_at ? 'Delete User' : 'Permanently Delete User' }}</button>
                     <loading-button :loading="form.processing" class="btn btn-primary ml-auto" type="submit">Update User</loading-button>
                 </div>
             </form>

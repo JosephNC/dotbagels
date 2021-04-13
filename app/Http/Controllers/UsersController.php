@@ -212,9 +212,13 @@ class UsersController extends Controller
 
         if (!$can_admin_destroy) return back()->withError('You cannot perform this operation.');
 
-        $user->delete();
-
-        return back()->with('success', 'User deleted.');
+        if ( $user->trashed() ) {
+            $user->forceDelete();
+            return redirect( route( 'users' ) )->with('success', 'User permanently deleted.');
+        } else {
+            $user->delete();
+            return back()->with('success', 'User deleted.');
+        }
     }
 
     public function restore(User $user)
